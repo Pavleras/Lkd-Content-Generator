@@ -58,7 +58,7 @@ def upload_file():
 
     file = request.files['file']
     url = f"{FLOWISE_API_URL}/document-store/upsert/{FLOWISE_DOCSTORE_ID}"
-    headers = {"Authorization": f"Bearer {FLOWISE_API_TOKEN}"}
+    headers = {"Authorization": f"Bearer {FLOWISE_API_KEY}"}
     docId = FLOWISE_DOC_ID
 
     try:
@@ -83,7 +83,7 @@ def upload_file():
 def get_conversations():
     """Recupera los mensajes de una conversación específica."""
     url = f"{FLOWISE_API_URL}/chatmessage/c015d97b-7eba-43db-9408-c7fb42314cfd"
-    headers = {"Authorization": f"Bearer {FLOWISE_API_TOKEN}"}
+    headers = {"Authorization": f"Bearer {FLOWISE_API_KEY}"}
 
     try:
         response = requests.get(url, headers=headers)
