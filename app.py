@@ -5,12 +5,11 @@ import json
 
 app = Flask(__name__)
 
+
+
 # Configuración de la API de Flowise
-FLOWISE_API_URL = "http://localhost:3000/api/v1"
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-FLOWISE_API_TOKEN = "dJ0_aNPuS8kmnQYYHXymkZbTxCJHa8er8XTzaa1kgE0"
+FLOWISE_API_URL = f"{os.getenv("FLOWISE_API_URL")}/api/v1"
+FLOWISE_API_TOKEN = os.getenv("FLOWISE_API_TOKEN")
 
 
 @app.route('/')
@@ -51,36 +50,31 @@ def execute_flow():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    """Sube un archivo y lo envía a Flowise."""
+    """Sube un archivo y lo envía a Flowise sin guardarlo localmente."""
     if 'file' not in request.files or not request.files['file'].filename:
         return jsonify({'error': 'Archivo no seleccionado'}), 400
 
     file = request.files['file']
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-    file.save(file_path)
-
     url = f"{FLOWISE_API_URL}/document-store/upsert/01f977c3-35a7-4602-93d3-6398d38d48de"
     headers = {"Authorization": f"Bearer {FLOWISE_API_TOKEN}"}
     docId = "7d94411e-4e44-40e6-a702-3baa992841dc"
-    
-    try:
-        with open(file_path, 'rb') as f:
-            form_data = {"files": (file.filename, f)}
-            body_data = {
-                "docId": docId,
-                # override existing configuration
-                # "loader": "",
-                "splitter": json.dumps({"name":"recursiveCharacterTextSplitter","config":{"chunkSize":20000}})
-                # "vectorStore": "",
-                # "embedding": "",
-                # "recordManager": "",
-            }
 
-            response = requests.post(url, headers=headers, files=form_data, data=body_data)
-            response.raise_for_status()
-        return jsonify({'message': 'File uploaded successfully'}), 200
+    try:
+        # Construcción de los datos del formulario y el cuerpo
+        form_data = {"files": (file.filename, file.stream, file.mimetype)}
+        body_data = {
+            "docId": docId,
+            "splitter": json.dumps({"name": "recursiveCharacterTextSplitter", "config": {"chunkSize": 20000}})
+        }
+
+        # Envío del archivo directamente a Flowise
+        response = requests.post(url, headers=headers, files=form_data, data=body_data)
+        response.raise_for_status()  # Lanza una excepción si la solicitud falla
+
+        return jsonify({'message': 'File uploaded successfully', 'response': response.json()}), 200
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
+
 
 
 @app.route('/get_conversations', methods=['GET'])
