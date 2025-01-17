@@ -10,7 +10,9 @@ app = Flask(__name__)
 # Configuración de la API de Flowise
 FLOWISE_API_URL = f"{os.getenv("FLOWISE_API_URL")}/api/v1"
 FLOWISE_API_TOKEN = os.getenv("FLOWISE_API_TOKEN")
-
+FLOWISE_DOCSTORE_ID = os.getenv("FLOWISE_DOCSTORE_ID")
+FLOWISE_DOC_ID = os.getenv("FLOWISE_DOC_ID")
+FLOWISE_IDEA_TO_CONTENT = os.getenv("FLOWISE_IDEA_TO_CONTENT")
 
 @app.route('/')
 def index():
@@ -37,7 +39,7 @@ def execute_flow():
     if not payload or "question" not in payload:
         return jsonify({"error": "El cuerpo debe incluir un campo 'question'"}), 400
 
-    url = f"{FLOWISE_API_URL}/prediction/c015d97b-7eba-43db-9408-c7fb42314cfd"
+    url = f"{FLOWISE_API_URL}/prediction/{FLOWISE_IDEA_TO_CONTENT}"
     headers = {"Authorization": f"Bearer {FLOWISE_API_TOKEN}"}
 
     try:
@@ -55,9 +57,9 @@ def upload_file():
         return jsonify({'error': 'Archivo no seleccionado'}), 400
 
     file = request.files['file']
-    url = f"{FLOWISE_API_URL}/document-store/upsert/01f977c3-35a7-4602-93d3-6398d38d48de"
+    url = f"{FLOWISE_API_URL}/document-store/upsert/{FLOWISE_DOCSTORE_ID}"
     headers = {"Authorization": f"Bearer {FLOWISE_API_TOKEN}"}
-    docId = "7d94411e-4e44-40e6-a702-3baa992841dc"
+    docId = FLOWISE_DOC_ID
 
     try:
         # Construcción de los datos del formulario y el cuerpo
