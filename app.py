@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Configuración de la API de Flowise
 FLOWISE_API_URL = f"{os.getenv("FLOWISE_API_URL")}/api/v1"
-FLOWISE_API_TOKEN = os.getenv("FLOWISE_API_TOKEN")
+FLOWISE_API_KEY = os.getenv("FLOWISE_API_KEY")
 FLOWISE_DOCSTORE_ID = os.getenv("FLOWISE_DOCSTORE_ID")
 FLOWISE_DOC_ID = os.getenv("FLOWISE_DOC_ID")
 FLOWISE_IDEA_TO_CONTENT = os.getenv("FLOWISE_IDEA_TO_CONTENT")
@@ -40,7 +40,7 @@ def execute_flow():
         return jsonify({"error": "El cuerpo debe incluir un campo 'question'"}), 400
 
     url = f"{FLOWISE_API_URL}/prediction/{FLOWISE_IDEA_TO_CONTENT}"
-    headers = {"Authorization": f"Bearer {FLOWISE_API_TOKEN}"}
+    headers = {"Authorization": f"Bearer {FLOWISE_API_KEY}"}
 
     try:
         response = requests.post(url, headers=headers, json=payload)
