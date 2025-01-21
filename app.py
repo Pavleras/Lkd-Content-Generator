@@ -6,7 +6,6 @@ import json
 app = Flask(__name__)
 
 
-
 # Configuración de la API de Flowise
 FLOWISE_API_URL = f"{os.getenv("FLOWISE_API_URL")}/api/v1"
 FLOWISE_API_KEY = os.getenv("FLOWISE_API_KEY")
@@ -82,10 +81,12 @@ def upload_file():
 @app.route('/get_conversations', methods=['GET'])
 def get_conversations():
     """Recupera los mensajes de una conversación específica."""
-    url = f"{FLOWISE_API_URL}/chatmessage/c015d97b-7eba-43db-9408-c7fb42314cfd"
+    url = f"{FLOWISE_API_URL}/chatmessage/fba1aaeb-05bc-48a1-9d4a-a0a08245d8a0"
     headers = {"Authorization": f"Bearer {FLOWISE_API_KEY}"}
 
     try:
+        print(url)
+        print(headers)
         response = requests.get(url, headers=headers)
         response.raise_for_status()
         return jsonify(response.json())
