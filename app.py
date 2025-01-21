@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 # Configuración de la API de Flowise
-FLOWISE_API_URL = f"{os.getenv("FLOWISE_API_URL")}/api/v1"
+FLOWISE_API_URL = f"{os.getenv('FLOWISE_API_URL')}/api/v1"
 FLOWISE_API_KEY = os.getenv("FLOWISE_API_KEY")
 FLOWISE_DOCSTORE_ID = os.getenv("FLOWISE_DOCSTORE_ID")
 FLOWISE_DOC_ID = os.getenv("FLOWISE_DOC_ID")
