@@ -10,6 +10,9 @@ $(document).ready(function () {
             return;
         }
 
+         // Mostrar el spinner antes de la solicitud
+         $('#spinner').removeClass('d-none');
+
         // Hacer la solicitud al backend
         $.ajax({
             url: `/execute_flow/`,
@@ -38,6 +41,10 @@ $(document).ready(function () {
                               .addClass('alert-danger')
                               .text(xhr.responseJSON?.error || 'Error desconocido.');
                 alert('Error al enviar el mensaje: ' + (xhr.responseJSON?.error || 'Error desconocido'));
+            },
+            complete: function () {
+                // Ocultar el spinner después de completar la solicitud
+                $('#spinner').addClass('d-none');
             }
         });
     });
