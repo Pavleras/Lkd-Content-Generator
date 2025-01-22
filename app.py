@@ -7,11 +7,18 @@ app = Flask(__name__)
 
 
 # Configuración de la API de Flowise
-FLOWISE_API_URL = f"{os.getenv('FLOWISE_API_URL')}/api/v1"
-FLOWISE_API_KEY = os.getenv("FLOWISE_API_KEY")
-FLOWISE_DOCSTORE_ID = os.getenv("FLOWISE_DOCSTORE_ID")
-FLOWISE_DOC_ID = os.getenv("FLOWISE_DOC_ID")
-FLOWISE_IDEA_TO_CONTENT = os.getenv("FLOWISE_IDEA_TO_CONTENT")
+# FLOWISE_API_URL = f"{os.getenv('FLOWISE_API_URL')}/api/v1"
+# FLOWISE_API_KEY = os.getenv("FLOWISE_API_KEY")
+# FLOWISE_DOCSTORE_ID = os.getenv("FLOWISE_DOCSTORE_ID")
+# FLOWISE_DOC_ID = os.getenv("FLOWISE_DOC_ID")
+# FLOWISE_IDEA_TO_CONTENT = os.getenv("FLOWISE_IDEA_TO_CONTENT")
+
+FLOWISE_API_URL = f"{os.environ.get('FLOWISE_API_URL')}/api/v1"
+FLOWISE_API_KEY = os.environ.get("FLOWISE_API_KEY")
+FLOWISE_DOCSTORE_ID = os.environ.get("FLOWISE_DOCSTORE_ID")
+FLOWISE_DOC_ID = os.environ.get("FLOWISE_DOC_ID")
+FLOWISE_IDEA_TO_CONTENT = os.environ.get("FLOWISE_IDEA_TO_CONTENT")
+
 
 @app.route('/')
 def index():
@@ -81,7 +88,7 @@ def upload_file():
 @app.route('/get_conversations', methods=['GET'])
 def get_conversations():
     """Recupera los mensajes de una conversación específica."""
-    url = f"{FLOWISE_API_URL}/chatmessage/fba1aaeb-05bc-48a1-9d4a-a0a08245d8a0"
+    url = f"{FLOWISE_API_URL}/chatmessage/{FLOWISE_IDEA_TO_CONTENT}"
     headers = {"Authorization": f"Bearer {FLOWISE_API_KEY}"}
 
     try:
